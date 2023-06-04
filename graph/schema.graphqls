@@ -1,0 +1,155 @@
+enum PartType { 
+  Leg, 
+  Arm, 
+  Body, 
+  Head
+}
+enum Side { 
+  left, 
+  right,
+  both 
+}
+
+type PreviousOwnerData {user: String, sellPrice: Float }
+input InputPreviousOwnerData {user: String, sellPrice: Float }
+
+type OwnedPartPart {
+  Part: PartType!,
+  id: String!
+}
+
+input InputOwnedPartPart {
+  Part: PartType!,
+  id: String!
+}
+
+#set the dictionaries for arm and legs
+type Legs {
+  left: String!,
+  right: String!
+}
+type Arms {
+  left: String!,
+  right: String!
+}
+
+input InputLegs {
+  left: String!,
+  right: String!
+}
+input InputArms {
+  left: String!,
+  right: String!
+}
+
+
+type Part {
+  id: ID!,
+  part: PartType!,
+  name: String!,
+  description: String!,
+  price: Float!,
+  imageLocation: String,
+  owner: String!,
+  previousPrices: [PreviousOwnerData!],
+  side: Side!
+}
+
+type TeddyBear {
+  id: ID!
+  totalPrice: Float!
+  head: String
+  body: String
+  arms: Arms
+  legs: Legs
+}
+
+type User {
+  id: ID!
+  username: String!
+  password: String!
+  ownedBears: [String!]
+  ownedParts: [OwnedPartPart!]
+  accountBalance: Float
+  lastPassword: String
+  email: String!
+}
+
+input NewUser {
+  username: String!
+  password: String!
+  ownedBears: [String!]
+  ownedParts: [InputOwnedPartPart!]
+  accountBalance: Float
+  lastPassword: String
+  email: String!
+}
+
+input ModifyUser {
+  id: ID!
+  username: String!
+  password: String!
+  ownedBears: [String!]
+  ownedParts: [InputOwnedPartPart!]
+  accountBalance: Float
+  lastPassword: String
+  email: String!
+}
+
+input NewTeddyBear {
+  totalPrice: Float,
+  head: String,
+  body: String,
+  arms: InputArms,
+  legs: InputLegs
+}
+input ModifyTeddyBear {
+  id: ID!,
+  totalPrice: Float,
+  head: String,
+  body: String,
+  arms: InputArms,
+  legs: InputLegs
+}
+input NewPart {
+  part: PartType!,
+  name: String!,
+  description: String!,
+  price: Float!,
+  imageLocation: String,
+  owner: String!,
+  previousPrices: [InputPreviousOwnerData!],
+  side: Side!
+}
+input ModifyPart {
+  id: ID!,
+  part: PartType!,
+  name: String!,
+  description: String!,
+  price: Float!,
+  imageLocation: String,
+  owner: String!,
+  previousPrices: [InputPreviousOwnerData!],
+  side: Side!
+}
+type Query{
+  GetOwnedBearsList(user:ModifyUser): [TeddyBear]
+  GetUser(id: ID!): User
+  GetOwnedParts(user: ModifyUser): [Part]
+  GetOwnedPartsByType(user: ModifyUser , Part: PartType): [Part]
+  GetBearInfo(bear: ModifyTeddyBear): [Part]
+}
+
+
+type Mutation {
+  CreatePart(part: NewPart): Part
+  CreateUser(user: NewUser): User
+  CreateBear(bear: NewTeddyBear): TeddyBear
+  #sell a bear
+  SellBear(ownedBear: ModifyTeddyBear, newOwner: ModifyUser): TeddyBear
+  # modify DB stuf
+  ModifyPart(part: ModifyPart): Part
+  ModifyUser(user: ModifyUser): User
+  ModifyTeddybear(ownedBear: ModifyTeddyBear): TeddyBear
+}
+

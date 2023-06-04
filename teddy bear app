@@ -1,0 +1,48 @@
+user {
+    id: integer,
+    username: string,
+    password: string,
+    ownedBears: teddyBear.id[],
+    OwnedItems: Item[]
+    accountBalance: Money,
+    lastPassword: string,
+    email: Email,
+
+}
+
+teddyBear {
+    id: integer,
+    totalPrice: money,
+    head: Head.id,
+    body: Body.id,
+    arms: [left: Arm.id,right: Arm.id],
+    legs: [left: Leg.id,right: Leg.id]
+}
+item {
+    id: integer,
+    name: sting,
+    description: string,
+    price: Money,
+    imageLocation : string,
+    owner: user.username
+    previousPrices: money[]
+
+}
+OreintationItem extends Item {
+    id: integer,
+    name: sting,
+    description: string,
+    price: Money,
+    imageLocation : string,
+    owner: user.username
+    previousPrices: money[]
+    side: "left"| "right",
+
+}
+Head: Item
+Body: Item
+Arm: OreintationItem
+leg: OreintationItem
+
+Money: decimal(2)
+Email: string
